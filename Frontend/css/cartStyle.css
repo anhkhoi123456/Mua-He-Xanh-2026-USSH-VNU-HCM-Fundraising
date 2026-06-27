@@ -1,0 +1,375 @@
+
+
+/* Copyright (c) 2026 Tran Duong Anh Khoi. Licensed under the MIT License. */
+
+
+:root {
+    --bg: #F8F9FA;           
+    --surface: #FFFFFF;
+    --text: #1E2922;
+    --muted: #6B7280;        
+    --primary: #15794C;      
+    --primary-hover: #0E5E3A;
+    --border: #E5E7EB;       
+    --danger: #DC2626;
+}
+
+/* 1. FORCE THE BODY TO FILL THE VERTICAL SCREEN SPACE */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex;
+    flex-direction: column; /* Stacks header, content, and footer vertically */
+}
+
+/* 2. CHOOSE A WRAPPER TO PUSH THE FOOTER DOWN */
+/* We use the .container wrapper to absorb all remaining empty vertical space */
+body > .container {
+    flex: 1 0 auto; 
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border);
+}
+.back-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+.cart-title-header {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+/* Two Column Layout Grid */
+.cart-layout {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 40px;
+    margin-top: 32px;
+    min-height: 50vh;
+}
+
+/* Individual Cart Rows Setup */
+.cart-item-row {
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    gap: 16px;
+}
+.cart-item-img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+.cart-item-details {
+    flex-grow: 1;
+}
+.cart-item-details h4 {
+    margin: 0 0 4px 0;
+    font-size: 1.05rem;
+}
+.cart-item-price {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* Quantity Adjuster Actions */
+.quantity-control {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--bg);
+}
+.qty-btn {
+    background: transparent;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.qty-btn:hover { background: #EAEAEA; }
+.qty-val {
+    padding: 0 12px;
+    font-weight: 600;
+}
+
+.btn-delete {
+    background: transparent;
+    border: none;
+    color: var(--danger);
+    cursor: pointer;
+    padding: 8px;
+}
+
+/* Sidebar Box Form Elements */
+.summary-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    position: sticky;
+    top: 24px;
+}
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+.free-badge { color: var(--primary); font-weight: bold; }
+
+form label {
+    display: block;
+    margin: 16px 0 6px 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+.btn-order-submit {
+    display: block;
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-order-submit:hover { background: var(--primary-hover); }
+
+.empty-message {
+    text-align: center;
+    color: var(--muted);
+    padding: 40px 0;
+}
+
+/* 3. UPDATED CLEAN FOOTER ANCHOR */
+.site-footer {
+    flex-shrink: 0; /* Prevents the footer from squishing or shrinking */
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    margin-top: 60px; /* Healthy separation boundary if content overflows long */
+    font-size: 0.85rem;
+    color: var(--muted);
+    width: 100%;
+}
+
+.footer-container { 
+    display: flex; 
+    justify-content: space-between; 
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .cart-layout { grid-template-columns: 1fr; }
+    .footer-container {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+}
+
+/* ==========================================
+   QR CODE PAYMENT SECTION
+   ========================================== */
+.payment-section {
+    margin: 20px 0;
+    text-align: center;
+    background-color: #F8FAF9; /* Soft background to make the QR pop */
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px dashed var(--primary, #15794C); /* Theme-matching dashed border */
+}
+
+.payment-section h4 {
+    margin: 0 0 8px 0;
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+.payment-instruction {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.qr-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.qr-code {
+    max-width: 180px; /* Perfect size for scanning on desktop or mobile */
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Soft shadow */
+    border: 4px solid white; /* Clean white frame around the QR */
+}
+
+/* ==========================================
+   LIGHTBOX MODAL
+   ========================================== */
+.lightbox-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); /* Dark transparent background */
+    justify-content: center;
+    align-items: center;
+}
+
+.lightbox-content {
+    max-width: 90%;
+    max-height: 90vh;
+    border-radius: 12px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    animation: zoomIn 0.3s ease;
+    background: white; /* Helpful for QR codes with transparent backgrounds */
+    padding: 16px;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.lightbox-close:hover,
+.lightbox-close:focus {
+    color: var(--primary, #15794C);
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* ==========================================
+   TOOLTIP HOVER EFFECT
+   ========================================== */
+.has-tooltip {
+    position: relative;
+    cursor: help; /* Changes cursor to a question mark/pointer on hover */
+}
+
+/* The actual text box */
+.has-tooltip::after {
+    content: attr(data-tooltip); /* Pulls the text from your HTML attribute */
+    position: absolute;
+    bottom: 130%; /* Pushes it above the text */
+    right: 0; /* Aligns it safely to the right edge */
+    background-color: #1E2922; /* Matches your --text variable */
+    color: #FFFFFF;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap; /* Prevents text from awkwardly wrapping */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    
+    /* Hide it by default with a smooth fade */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    z-index: 1000;
+}
+
+/* The little triangle arrow pointing down */
+.has-tooltip::before {
+    content: '';
+    position: absolute;
+    bottom: 100%; /* Sits right under the tooltip box */
+    right: 15px; /* Adjusts where the arrow points */
+    border-width: 6px;
+    border-style: solid;
+    border-color: #1E2922 transparent transparent transparent;
+    
+    /* Hide it by default */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    z-index: 1000;
+}
+
+/* Show both the box and arrow when hovered */
+.has-tooltip:hover::after,
+.has-tooltip:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ==========================================
+   SCROLLABLE CART LIST
+   ========================================== */
+#cart-list-container {
+    max-height: 60vh; /* Takes up a maximum of 60% of the screen height */
+    overflow-y: auto; /* Adds a vertical scrollbar ONLY if needed */
+    padding-right: 10px; /* Gives the scrollbar a little breathing room */
+}
+
+/* Optional: Make the scrollbar look sleek and modern (for Chrome/Edge/Safari) */
+#cart-list-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+#cart-list-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#cart-list-container::-webkit-scrollbar-thumb {
+    background-color: var(--border, #E5E7EB);
+    border-radius: 10px;
+}
+
+#cart-list-container::-webkit-scrollbar-thumb:hover {
+    background-color: var(--muted, #6B7280);
+}

@@ -1,0 +1,404 @@
+
+
+/* Copyright (c) 2026 Tran Duong Anh Khoi. Licensed under the MIT License. */
+
+
+:root {
+    --bg: #F0F4F1;           
+    --surface: #FFFFFF;
+    --text: #1E2922;
+    --muted: #5C6E63;        
+    --primary: #15794C;      /* Clean emerald green design rules for the store */
+    --primary-hover: #0E5E3A;
+    --border: #D2DDD6;       
+    --max-width: 1200px;
+}
+
+/* Global Elements styling for Shop */
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+}
+.container {
+    width: 100%;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0;
+}
+
+/* Catalog Filter Elements */
+.filter-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+.filter-pills {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.pill {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+.pill:hover, .pill.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* ==========================================
+   AMAZON-STYLE PRODUCT CARDS LAYOUT
+   ========================================== */
+
+/* 1. Ensure all cards in the grid have the exact same uniform height */
+/* ==========================================
+   UPDATED: 3-COLUMN ROBUST LAYOUT
+   ========================================== */
+
+.products-grid {
+    display: grid;
+    /* Force exactly 3 columns on desktop screens */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 32px; /* Increased gap to give fatter cards breathing room */
+}
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px; /* Slightly smoother rounded corners */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02); /* Subtle depth */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+}
+
+/* Fatter internal padding for more text space */
+.card-content {
+    padding: 24px; /* Jumped from 16px to 24px for a more premium, roomy look */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.card-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.card-title-row h3 {
+    margin: 0;
+    font-size: 1.2rem; /* Slightly larger title typography */
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--text);
+}
+
+.card-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary);
+    white-space: nowrap;
+}
+
+.card-content p {
+    margin: 0 0 24px 0;
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.5; /* Increased line-height for easier reading */
+}
+
+/* Responsive adjustment so it doesn't break on tablets/phones */
+@media (max-width: 992px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 cards on tablet views */
+    }
+}
+
+@media (max-width: 600px) {
+    .products-grid {
+        grid-template-columns: 1fr; /* 1 card on mobile viewports */
+    }
+}
+
+/* 5. Anchor button to the absolute bottom margin */
+.btn-add-to-cart {
+    margin-top: auto; /* Pushes the button to the bottom of the content block */
+    width: 100%;
+    padding: 10px 16px;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-add-to-cart:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Badges & Tags */
+.badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: white;
+}
+.badge-special {
+    background-color: #000000; 
+    color: #FFD700 !important;
+}
+.card-category {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 4px;
+}
+.card-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+/* ==========================================
+   UPDATED: SHRINK-TO-FIT & CENTER IMAGES
+   ========================================== */
+
+/* 1. The wrapper provides the background fill for empty spaces */
+.card-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 260px; 
+    overflow: hidden;
+    background-color: #ECECEC; /* The background color that fills the empty left/right or top/bottom bars */
+    
+    /* 💡 PRO-TIP: Add padding so your product photos don't touch the absolute edges */
+    padding: 16px; 
+    box-sizing: border-box; /* Keeps the container exactly 260px tall including the padding */
+}
+
+/* 2. Forces the image to contain itself proportionally */
+.card-image {
+    width: 100%;
+    height: 100%;
+    
+    /* 🌟 THE MAGIC SWAP: 'contain' stops it from cropping! */
+    object-fit: contain; 
+    object-position: center; /* Guarantees it stays perfectly centered horizontally and vertically */
+    display: block;
+}
+
+/* 3. Re-adjust badges so they float perfectly in the corners of your new layout */
+.badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: white;
+}
+
+.badge-new {
+    background-color: #15794C; /* Green theme match */
+}
+
+.badge-limited {
+    background-color: #DC2626; /* Danger red theme match */
+}
+.card-title-row h3 { margin: 0; font-size: 1.15rem; }
+.card-price { font-weight: 700; color: var(--primary); }
+
+/* Buttons */
+.btn {
+    background: var(--primary);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    border: none;
+    transition: background 0.2s;
+}
+
+.footer-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.btn:hover { background: var(--primary-hover); }
+.btn-sm { padding: 8px 16px; font-size: 0.88rem; cursor: pointer; }
+.btn-full { width: 100%; text-align: center; margin-top: auto; cursor: pointer; }
+
+/* ==========================================
+   FOOTER STYLING
+   ========================================== */
+.site-footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    margin-top: 80px; /* Pushes the footer away from the catalog grid */
+    font-size: 0.88rem;
+    color: var(--muted);
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-logo-box {
+    width: 24px;
+    height: 24px;
+    background: #D2DDD6; /* Clean background match for the site layout */
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+.footer-org-name {
+    color: var(--text);
+}
+
+.footer-right {
+    text-align: right;
+}
+
+/* Responsive breakpoint handling for small screens */
+@media (max-width: 600px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+    }
+    .footer-right {
+        text-align: center;
+    }
+}
+
+/* ==========================================
+   LIGHTBOX IMAGE VIEWER (FACEBOOK STYLE)
+   ========================================== */
+.lightbox-modal {
+    display: none; /* Hidden by default until clicked */
+    position: fixed;
+    z-index: 99999; /* Layered on top of headers and badges */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* Dark semi-transparent backdrop */
+    justify-content: center;
+    align-items: center;
+    cursor: zoom-out; /* Cursor visual cue to click out */
+}
+
+.lightbox-content {
+    max-width: 90%;
+    max-height: 85%;
+    object-fit: contain; /* Shrinks large pictures to fit the screen */
+    border-radius: 4px;
+    cursor: default; /* Normal pointer inside the picture boundaries */
+    animation: zoomAnimation 0.2s cubic-bezier(0.1, 0.8, 0.25, 1);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #FFFFFF;
+    font-size: 45px;
+    font-weight: 300;
+    cursor: pointer;
+    line-height: 1;
+    transition: transform 0.2s ease;
+    user-select: none;
+}
+
+.lightbox-close:hover {
+    transform: scale(1.15);
+}
+
+/* Smooth pop-in animation effect */
+@keyframes zoomAnimation {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Give product images a zoom cursor look on hover */
+.card-image {
+    cursor: zoom-in;
+}
+
+header {
+    /* 1. Make it stick to the top */
+    position: sticky;
+    top: 0;
+    
+    /* 2. Keep it above all other scrolling content */
+    z-index: 1000;
+    
+    /* 3. Give it a solid background so scrolling items don't show through */
+    background-color: var(--bg, #F8F9FA); 
+    
+    /* Optional: Add a subtle shadow when scrolling for better separation */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
+}

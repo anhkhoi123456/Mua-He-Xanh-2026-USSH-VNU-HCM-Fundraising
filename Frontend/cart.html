@@ -1,0 +1,98 @@
+
+
+<!-- Copyright (c) 2026 Tran Duong Anh Khoi. Licensed under the MIT License. -->
+
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Cart</title>
+    <link rel="stylesheet" href="css/cartStyle.css">
+</head>
+<body>
+
+    <div class="container">
+        <header class="navbar">
+            <a href="shop.html" class="back-link">← Tiếp tục mua sắm</a>
+            <div class="cart-title-header">Kiểm tra giỏ hàng</div>
+        </header>
+
+        <main class="cart-layout">
+            <section class="cart-items-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin: 0;">Bên trong giỏ hàng</h2>
+                    <button id="btn-clear-cart" class="btn" style="background-color: var(--danger, #DC2626); color: white; display: none; padding: 6px 12px; font-size: 14px; border: none; cursor: pointer;">Xóa tất cả</button>
+                </div>
+                
+                <div id="cart-list-container">
+                    </div>
+            </section>
+
+            <aside class="cart-summary-section">
+                <div class="summary-card">
+                    <h3>Tổng đơn hàng</h3>
+                    <div class="summary-row">
+                        <span>Thành tiền</span>
+                        <span id="summary-total-price">0 VND</span>
+                    </div>
+                    <!-- <div style="text-align: right; margin-top: 8px;">
+                        <a href="shipping-policy.html" target="_blank" style="font-size: 14px; color: var(--primary, #15794C); text-decoration: underline;">Xem chính sách giao hàng</a>
+                    </div> -->
+                </div>
+                <hr>
+
+                    <div class="payment-section">
+                        <h4>Thanh toán qua chuyển khoản</h4>
+                        <p class="payment-instruction">
+                            Quét mã QR dưới đây để thanh toán. <br>
+                            Nội dung CK: <strong>[Họ và tên] - [SĐT] - [Tên trường]</strong>
+                        </p>
+                        <div class="qr-container">
+                            <img src="images/qr-code.png" alt="Mã QR Thanh toán" class="qr-code" onerror="this.src='images/qrCode.png';">
+                        </div>
+                        <p class = "disclaimer">
+                            <strong>NẾU KHÔNG NHẬP ĐÚNG CÚ PHÁP NỘI DUNG CHUYỂN KHOẢN TRÊN, MỌI MẤT MÁT, THẤT LẠC, CHÚNG TÔI KHÔNG CHỊU TRÁCH NHIỆM</strong>
+                        </p>
+                    </div>
+                    <hr>
+                    
+                    <form id="order-submission-form">
+                        <label for="customer-name">Họ và Tên</label>
+                        <input type="text" id="customer-name" placeholder="vd: Nguyễn Văn A" required>
+                        
+                        <label for="customer-uni">Tên trường bạn đang học</label>
+                        <input type="text" id="customer-uni" placeholder="vd: USSH-VNUHCM, UIT, HCMUS etc" required>
+                        
+                        <label for="customer-phone">Phone Number</label>
+                        <input type="tel" id="customer-phone" placeholder="vd: 0123456789" required>
+
+                        <label for="customer-zalo">Zalo Phone Number</label>
+                        <input type="tel" id="customer-zalo" placeholder="vd: 0123456789 (Để trống nếu trùng với số điện thoại.)">
+
+                        <label for="customer-email">Email Address</label>
+                        <input type="email" id="customer-email" placeholder="abc@gmail.com" required>
+
+                        <button type="submit" class="btn btn-order-submit">Đặt hàng</button>
+                    </form>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container footer-container">
+            <div><strong>[Organization Name]</strong></div>
+            <div>100% lợi nhuận sẽ được dùng để quyên góp gây quỹ.</div>
+        </div>
+    </footer>
+
+    <div id="imageLightbox" class="lightbox-modal">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightboxImage" src="" alt="Enlarged QR Code">
+    </div>
+
+    <script src="js/cart.js"></script>
+</body>
+</html>
