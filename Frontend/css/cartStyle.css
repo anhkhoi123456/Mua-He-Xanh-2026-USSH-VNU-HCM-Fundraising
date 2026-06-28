@@ -58,6 +58,40 @@ body > .container {
 }
 
 /* Two Column Layout Grid */
+
+/* Sticky Header Frame Layout */
+.cart-sticky-navbar {
+    position: sticky;
+    top: 0;
+    background-color: var(--surface, #FFFFFF);
+    z-index: 5000; /* Layers cleanly over scrollable list rows */
+    border-bottom: 1px solid var(--border);
+    width: 100%;
+}
+
+.navbar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0; /* Tightened padding for cleaner sticky vertical footprint */
+}
+
+.cart-title-right {
+    display: flex;
+    align-items: center;
+}
+
+/* Premium Badge styling matching your branding color palette */
+.sticky-total-badge {
+    background-color: #F0Fdf4;
+    color: var(--primary, #15794C);
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    border: 1px solid rgba(21, 121, 76, 0.15);
+}
+
 .cart-layout {
     display: grid;
     grid-template-columns: 1fr 360px;
@@ -131,8 +165,9 @@ body > .container {
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 24px;
-    position: sticky;
-    top: 24px;
+    
+    /* 🌟 Make this a normal, static element so it can scroll out of view */
+    position: relative; 
 }
 .summary-row {
     display: flex;

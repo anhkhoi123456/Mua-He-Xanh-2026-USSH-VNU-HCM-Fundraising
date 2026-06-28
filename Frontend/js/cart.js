@@ -1,11 +1,7 @@
-
-
-/* Copyright (c) 2026 Tran Duong Anh Khoi. Licensed under the MIT License. */
-
-
 document.addEventListener('DOMContentLoaded', () => {
     const listContainer = document.getElementById('cart-list-container');
     const totalPriceDisplay = document.getElementById('summary-total-price');
+    const stickyHeaderTotalDisplay = document.getElementById('sticky-header-total'); // 🌟 New Sticky element reference
     const orderForm = document.getElementById('order-submission-form');
     const clearCartBtn = document.getElementById('btn-clear-cart');
     
@@ -20,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cart.length === 0) {
             listContainer.innerHTML = `<p class="empty-message">Đơn hàng của bạn đang trống</p>`;
             totalPriceDisplay.textContent = '0 VND';
+            if (stickyHeaderTotalDisplay) stickyHeaderTotalDisplay.textContent = 'Tổng: 0 VND'; // 🌟 Handle empty states
             if (clearCartBtn) clearCartBtn.style.display = 'none'; 
             return;
         }
@@ -51,7 +48,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         listContainer.innerHTML = htmlContent;
-        totalPriceDisplay.textContent = calculatedTotal.toLocaleString('vi-VN') + ' VND';
+        
+        // Format Currency Values cleanly
+        const formattedPriceString = calculatedTotal.toLocaleString('vi-VN') + ' VND';
+        
+        // Synchronize display text fields simultaneously 
+        totalPriceDisplay.textContent = formattedPriceString;
+        if (stickyHeaderTotalDisplay) {
+            stickyHeaderTotalDisplay.textContent = `Tổng: ${formattedPriceString}`; // 🌟 Synchronize Sticky header view state
+        }
         
         bindCartEvents();
     }
@@ -143,11 +148,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 if(!response.ok) throw new Error('Failed to post');
 
-                // 1. Update text inside modal
                 const currentTotalStr = document.getElementById('summary-total-price').textContent;
                 confirmTotalMsg.textContent = `Tổng cộng: ${currentTotalStr}`;
                 
-                // 2. Show Modal & Disable scrolling
                 confirmModal.style.display = 'flex';
                 document.body.style.overflow = 'hidden'; 
 
