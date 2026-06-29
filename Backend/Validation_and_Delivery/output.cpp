@@ -31,7 +31,7 @@ std::string generateGoogleSheetsPayload(const ClientData& cd) {
         }
         cartDetails += std::to_string(item.first) + ":" + std::to_string(item.second);
     }
-    payload["cartData"] = cartDetails;
+    payload["cartDetails"] = cartDetails;
 
     // 3. Return the stringified JSON payload
     return payload.dump();

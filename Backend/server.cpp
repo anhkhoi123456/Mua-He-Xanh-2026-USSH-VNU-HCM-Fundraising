@@ -15,7 +15,7 @@ using json = nlohmann::json;
 
 int main() {
     // 1. Pre-runtime Initializations
-    loadPricesFromCsv("products.csv"); 
+    loadPricesFromGoogle();
 
     httplib::Server svr;
 
@@ -47,6 +47,7 @@ int main() {
             res.set_content(R"({"status":"error","message":"Malformed request payload"})", "application/json");
             return;
         }
+        orderContext.orderID = generateID();
 
         // Step B: Execute internal logic, calculations, and ID assignment (data.cpp)
         calculateTotals(orderContext);
@@ -59,7 +60,7 @@ int main() {
         
         // CRITICAL: Must be enabled to follow Google Apps Script 302 redirects
         cli.set_follow_location(true); 
-        std::string webhookPath = "/macros/s/YOUR_APPS_SCRIPT_DEPLOYMENT_ID/exec";
+        std::string webhookPath = "/macros/s/AKfycbzNw3gNwCJIOby4jEY-B3e4tSY0ewHUMoVqSTR_xkKSG24hvH3zQcJQj10qTUxX3p4lrA/exec";
 
         auto googleRes = cli.Post(webhookPath.c_str(), sheetPayload, "application/json");
         

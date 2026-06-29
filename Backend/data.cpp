@@ -4,57 +4,73 @@
 
 
 #include "data.hpp"
+#include "httplib.h"
 #include <chrono>
 #include <atomic>
 #include <fstream>
 #include <iostream>
+#include <algorithm>
+#include <cctype>
 #include "json.hpp"
 
 // Price table with int keys - O(1) lookup
 std::unordered_map<int, uint64_t> priceTable;
 
-// Then write a function to run before your server listens:
-void loadPricesFromCsv(const std::string& filename) {
-    std::ifstream file(filename);
-    if (!file.is_open()) {
-        std::cerr << "[SYSTEM FATAL] Could not open configuration file: " << filename << std::endl;
-        return;
-    }
+void loadPricesFromGoogle() {
+    std::cout << "[SYSTEM] Connecting to Google Sheets to fetch product database..." << std::endl;
 
-    std::string line;
-    // Read and discard the header row: "ID,Name,Price"
-    std::getline(file, line); 
+    // Connect to Google Docs via HTTPS
+    httplib::Client cli("https://docs.google.com");
+    cli.set_follow_location(true); // 🌟 CRITICAL: Google Sheets uses redirects, this tells httplib to follow them
 
-    int loadedCount = 0;
+    // Replace these with your actual DOC_ID and GID
+    std::string docId = "14SKc8HEgUXFGW3jCat5TE54wZJIr76FqM-oFX6oBzxk";
+    std::string gid = "1786818353";
 
-    // Stream the CSV line by line
-    while (std::getline(file, line)) {
-        if (line.empty()) continue;
+    std::string path = "/spreadsheets/d/" + docId + "/export?format=tsv&gid=" + gid;
 
-        std::stringstream ss(line);
-        std::string idStr, nameStr, priceStr;
+    auto res = cli.Get(path.c_str());
 
-        // Parse columns separated by commas
-        if (std::getline(ss, idStr, ',') && 
-            std::getline(ss, nameStr, ',') && 
-            std::getline(ss, priceStr, ',')) {
-            
-            try {
-                int id = std::stoi(idStr);
-                uint64_t price = std::stoull(priceStr);
+    if (res && res->status == 200) {
+        // Treat the downloaded web response body exactly like a file
+        std::stringstream ss(res->body);
+        std::string line;
+        
+        std::getline(ss, line); // Skip the header row
+
+        int loadedCount = 0;
+
+        while (std::getline(ss, line)) {
+            if (line.empty()) continue;
+
+            std::stringstream lineStream(line);
+            std::string idStr, nameStr, priceStr;
+
+            if (std::getline(lineStream, idStr, '\t') && 
+                std::getline(lineStream, nameStr, '\t') && 
+                std::getline(lineStream, priceStr, '\t')) {
                 
-                // Populate the hash table. Name is discarded to save RAM.
-                priceTable[id] = price;
-                loadedCount++;
-            }
-            catch (const std::exception& e) {
-                std::cerr << "[DATA WARNING] Skipping malformed CSV line: " << line << std::endl;
+                try {
+                    int id = std::stoi(idStr);
+                    
+                    priceStr.erase(std::remove_if(priceStr.begin(), priceStr.end(), [](char c) {
+                        return !std::isdigit(static_cast<unsigned char>(c));
+                    }), priceStr.end());
+
+                    uint64_t price = std::stoull(priceStr);
+                    priceTable[id] = price;
+                    loadedCount++;
+                }
+                catch (const std::exception& e) {
+                    std::cerr << "[DATA WARNING] Skipping malformed row: " << line << std::endl;
+                }
             }
         }
+        std::cout << "[SYSTEM OK] Successfully downloaded and loaded " << loadedCount << " products into RAM." << std::endl;
+    } else {
+        std::cerr << "[SYSTEM FATAL] Failed to download TSV from Google. HTTP Status: " 
+                  << (res ? std::to_string(res->status) : "Connection Failed") << std::endl;
     }
-    
-    file.close();
-    std::cout << "[SYSTEM OK] Successfully loaded " << loadedCount << " products into memory." << std::endl;
 }
 
 void calculateTotals(ClientData& cd){

@@ -23,6 +23,7 @@ struct ClientData {
 void calculateTotals(ClientData& cd);
 uint64_t generateOrderID();
 
-void loadPricesFromCsv(const std::string& filename);
+uint64_t generateID();
+void loadPricesFromGoogle();
 
 #endif
