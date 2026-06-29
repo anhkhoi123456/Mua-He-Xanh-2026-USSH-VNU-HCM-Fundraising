@@ -73,7 +73,12 @@ body > .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 0; /* Tightened padding for cleaner sticky vertical footprint */
+    padding: 16px 20px; /* Added 20px horizontal padding to match your container */
+    
+    /* Center the inner content and match the rest of the site */
+    max-width: 1100px; 
+    margin: 0 auto;
+    box-sizing: border-box;
 }
 
 .cart-title-right {

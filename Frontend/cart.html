@@ -9,20 +9,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review Cart</title>
+    <link rel="stylesheet" href="css/secret.css">
     <link rel="stylesheet" href="css/cartStyle.css">
+    
 </head>
 <body>
+    <header class="cart-sticky-navbar">
+        <div class="navbar-inner" style="display: flex; align-items: center; gap: 12px;">
+            <a href="shop.html" class="back-link">← Tiếp tục mua sắm</a>
+                
+        <div class="secret-wrapper">
+            <img id="secret-logo" src="images/Logo_UIT_Web_62171ff6af.png" alt="Secret Logo" style="height: 60px; width: auto;">
+            <div class="secret-tooltip">Được code bởi sinh viên trường Đại học Công nghệ thông tin, ĐHQG-HCM</div>
+            </div>
 
-    <div class="container">
-        <header class="cart-sticky-navbar">
-    <div class="navbar-inner">
-        <a href="shop.html" class="back-link">← Tiếp tục mua sắm</a>
-        <div class="cart-title-right">
-            <span class="cart-title-header" style="margin-right: 12px;">Kiểm tra giỏ hàng</span>
-            <span id="sticky-header-total" class="sticky-total-badge">Tổng: 0 VND</span>
+            <div class="cart-title-right" style="margin-left: auto;">
+                <span class="cart-title-header" style="margin-right: 12px;">Kiểm tra giỏ hàng</span>
+                <span id="sticky-header-total" class="sticky-total-badge">Tổng: 0 VND</span>
+            </div>
         </div>
-    </div>
-</header>
+    </header>
+    <div class="container">
+        
 
         <main class="cart-layout">
             <section class="cart-items-section">
@@ -99,5 +107,6 @@
     </div>
 
     <script src="js/cart.js"></script>
+    <script src="js/secret.js"></script>
 </body>
 </html>

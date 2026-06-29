@@ -303,17 +303,6 @@ body {
     gap: 10px;
 }
 
-.footer-logo-box {
-    width: 24px;
-    height: 24px;
-    background: #D2DDD6; /* Clean background match for the site layout */
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-}
-
 .footer-org-name {
     color: var(--text);
 }
@@ -334,9 +323,6 @@ body {
     }
 }
 
-/* ==========================================
-   LIGHTBOX IMAGE VIEWER (FACEBOOK STYLE)
-   ========================================== */
 .lightbox-modal {
     display: none; /* Hidden by default until clicked */
     position: fixed;
