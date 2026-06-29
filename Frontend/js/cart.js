@@ -143,11 +143,13 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(JSON.stringify(finalOrderPayload, null, 2));
 
             try {
-                const response = await fetch('https://mua-he-xanh-2026-ussh-vnu-hcm-fundraising.onrender.com', {
+                // Pointing directly to your newly provided backend Render URL
+                const response = await fetch('https://mua-he-xanh-2026-ussh-vnu-hcm-fundraising.onrender.com/api/checkout', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(finalOrderPayload)
                 });
+                
                 if(!response.ok) throw new Error('Failed to post');
 
                 const currentTotalStr = document.getElementById('summary-total-price').textContent;
@@ -156,7 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 confirmModal.style.display = 'flex';
                 document.body.style.overflow = 'hidden'; 
 
-            } catch (error) {
+            } 
+            catch (error) {
                 console.error("Order submission failure:", error);
                 alert("Lỗi kết nối đến máy chủ. Vui lòng thử lại sau.");
             }
