@@ -12,7 +12,7 @@
 
 struct ClientData {
     uint64_t orderID;
-    std::string fullName, uniName, phone, zaloPhone, email;
+    std::string fullName, uniName, phone, zaloPhone, email, deliveryAddress;
         
     // Now uses int keys to handle your 7-digit ID codes safely
     std::unordered_map<int, int> productCount;

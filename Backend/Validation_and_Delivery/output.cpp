@@ -18,6 +18,7 @@ std::string generateGoogleSheetsPayload(const ClientData& cd) {
     payload["phone"] = cd.phone;
     payload["zaloPhone"] = cd.zaloPhone;
     payload["email"] = cd.email;
+    payload["deliveryAddress"] = cd.deliveryAddress;
     payload["totalProductCount"] = cd.totalProductCount;
     payload["totalMoneyCount"] = cd.totalMoneyCount;
 

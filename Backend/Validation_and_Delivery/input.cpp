@@ -16,11 +16,12 @@ bool parseFrontendRequest(const std::string& jsonRequestBody, ClientData& outCli
         json parsedJson = json::parse(jsonRequestBody);
 
         // 1. Direct raw string property mapping
-        outClientData.fullName  = parsedJson.value("fullName", "");
-        outClientData.uniName   = parsedJson.value("uniName", "");
-        outClientData.phone     = parsedJson.value("phone", "");
+        outClientData.fullName = parsedJson.value("fullName", "");
+        outClientData.uniName = parsedJson.value("uniName", "");
+        outClientData.phone = parsedJson.value("phone", "");
         outClientData.zaloPhone = parsedJson.value("zaloPhone", "");
-        outClientData.email     = parsedJson.value("email", "");
+        outClientData.email = parsedJson.value("email", "");
+        outClientData.deliveryAddress = parsedJson.value("deliveryAddress", "");
 
         // Reset the product count lookup map to clear old data
         outClientData.productCount.clear();
