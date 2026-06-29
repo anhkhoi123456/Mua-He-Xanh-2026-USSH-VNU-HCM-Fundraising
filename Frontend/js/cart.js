@@ -150,13 +150,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify(finalOrderPayload)
                 });
                 
-                if(!response.ok) throw new Error('Failed to post');
+                if (!response.ok) throw new Error('Failed to post');
 
-                const currentTotalStr = document.getElementById('summary-total-price').textContent;
-                confirmTotalMsg.textContent = `Tổng cộng: ${currentTotalStr}`;
-                
-                confirmModal.style.display = 'flex';
-                document.body.style.overflow = 'hidden'; 
+                // CRITICAL: Consume the backend response body to close the network stream cleanly!
+                const data = await response.json(); 
+                console.log("Backend response received:", data);
+
+                // Only show success if the backend confirmed it
+                if (data.status === "success" || data.status === "partial_success") {
+                    const currentTotalStr = document.getElementById('summary-total-price').textContent;
+                    confirmTotalMsg.textContent = `Tổng cộng: ${currentTotalStr}`;
+                    
+                    confirmModal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden'; 
+                } else {
+                    throw new Error(data.message || "Unknown server error");
+                }
 
             } catch (error) {
                 console.error("Order submission failure:", error);
