@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(JSON.stringify(finalOrderPayload, null, 2));
 
             try {
-                const response = await fetch('http://localhost:8080/api/checkout', {
+                const response = await fetch('https://mua-he-xanh-2026-ussh-vnu-hcm-fundraising.onrender.com', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(finalOrderPayload)
