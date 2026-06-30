@@ -110,68 +110,75 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (orderForm) {
-        orderForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+        if (orderForm) {
+            orderForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
 
-            if (cart.length === 0) {
-                alert("Đơn hàng của bạn còn trống.");
-                return;
-            }
+                if (cart.length === 0) {
+                    alert("Đơn hàng của bạn còn trống.");
+                    return;
+                }
 
-            const productCountMap = {};
-            cart.forEach(item => {
-                const productId = item.id; 
-                if (productCountMap[productId]) {
-                    productCountMap[productId] += item.quantity;
-                } else {
-                    productCountMap[productId] = item.quantity;
+                // 🌟 CHUẨN HÓA DỮ LIỆU CHO BACKEND C++ (std::unordered_map<std::string, int>)
+                const productCountMap = {};
+                cart.forEach(item => {
+                    // Đảm bảo ID là chuỗi số sạch (numeric string) bằng cách lọc bỏ khoảng trắng hoặc ký tự lạ
+                    const numericStringId = String(item.id).trim(); 
+                    // Đảm bảo số lượng luôn được ép kiểu về số nguyên (int)
+                    const quantityInt = parseInt(item.quantity, 10) || 0;
+
+                    if (productCountMap[numericStringId]) {
+                        productCountMap[numericStringId] += quantityInt;
+                    } else {
+                        productCountMap[numericStringId] = quantityInt;
+                    }
+                });
+
+                // Đối tượng payload khớp hoàn toàn với cấu trúc struct ClientData của C++
+                const finalOrderPayload = {
+                    fullName: document.getElementById('customer-name').value,
+                    uniName: document.getElementById('customer-uni').value,
+                    phone: document.getElementById('customer-phone').value,
+                    zaloPhone: document.getElementById('customer-zalo').value || document.getElementById('customer-phone').value,
+                    email: document.getElementById('customer-email').value,
+                    deliveryAddress: document.getElementById('customer-address').value,
+                    productCount: productCountMap // Khớp tên trường 'productCount'
+                };
+
+                console.log("=== OUTBOUND BACKEND CHECKOUT JSON DATA POOL ===");
+                console.log(JSON.stringify(finalOrderPayload, null, 2));
+
+                try {
+                    // FORCE the request to go directly to your Docker backend domain
+                    const response = await fetch('https://mua-he-xanh-2026-ussh-vnu-hcm-fundraising.onrender.com/api/checkout', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(finalOrderPayload)
+                    });
+                    
+                    if (!response.ok) throw new Error('Failed to post');
+
+                    // CRITICAL: Consume the backend response body to close the network stream cleanly!
+                    const data = await response.json(); 
+                    console.log("Backend response received:", data);
+
+                    // Only show success if the backend confirmed it
+                    if (data.status === "success" || data.status === "partial_success") {
+                        const currentTotalStr = document.getElementById('summary-total-price').textContent;
+                        confirmTotalMsg.textContent = `Tổng cộng: ${currentTotalStr}`;
+                        
+                        confirmModal.style.display = 'flex';
+                        document.body.style.overflow = 'hidden'; 
+                    } else {
+                        throw new Error(data.message || "Unknown server error");
+                    }
+
+                } catch (error) {
+                    console.error("Order submission failure:", error);
+                    alert("Lỗi kết nối đến máy chủ. Vui lòng thử lại sau.");
                 }
             });
-
-            // Inside cart.js, update the finalOrderPayload object:
-            const finalOrderPayload = {
-                fullName: document.getElementById('customer-name').value,
-                uniName: document.getElementById('customer-uni').value,
-                phone: document.getElementById('customer-phone').value,
-                zaloPhone: document.getElementById('customer-zalo').value || document.getElementById('customer-phone').value,
-                email: document.getElementById('customer-email').value,
-                deliveryAddress: document.getElementById('customer-address').value, // 🌟 NEW FIELD ADDED
-                productCount: productCountMap
-            };
-
-            console.log("=== OUTBOUND BACKEND CHECKOUT JSON DATA POOL ===");
-            console.log(JSON.stringify(finalOrderPayload, null, 2));
-
-            try {
-                // FORCE the request to go directly to your Docker backend domain
-                const response = await fetch('https://mua-he-xanh-2026-ussh-vnu-hcm-fundraising.onrender.com/api/checkout', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(finalOrderPayload)
-                });
-                
-                if (!response.ok) throw new Error('Failed to post');
-
-                // CRITICAL: Consume the backend response body to close the network stream cleanly!
-                const data = await response.json(); 
-                console.log("Backend response received:", data);
-
-                // Only show success if the backend confirmed it
-                if (data.status === "success" || data.status === "partial_success") {
-                    const currentTotalStr = document.getElementById('summary-total-price').textContent;
-                    confirmTotalMsg.textContent = `Tổng cộng: ${currentTotalStr}`;
-                    
-                    confirmModal.style.display = 'flex';
-                    document.body.style.overflow = 'hidden'; 
-                } else {
-                    throw new Error(data.message || "Unknown server error");
-                }
-
-            } catch (error) {
-                console.error("Order submission failure:", error);
-                alert("Lỗi kết nối đến máy chủ. Vui lòng thử lại sau.");
-            }
-        });
+        }
     }
 
     if (btnCloseConfirm) {

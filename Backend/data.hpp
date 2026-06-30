@@ -20,8 +20,6 @@ struct ClientData {
 };
 
 void calculateTotals(ClientData& cd);
-uint64_t generateOrderID();
-
 uint64_t generateID();
 void loadPricesFromGoogle();
 
