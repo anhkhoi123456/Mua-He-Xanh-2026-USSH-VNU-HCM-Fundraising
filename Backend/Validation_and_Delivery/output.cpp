@@ -12,7 +12,7 @@ using json = nlohmann::json;
 std::string generateGoogleSheetsPayload(const ClientData& cd) {
     // 1. Package the C++ struct data into a JSON payload
     json payload;
-    payload["orderID"] = std::to_string(cd.orderID);
+    payload["orderID"] = cd.orderID;
     payload["fullName"] = cd.fullName;
     payload["uniName"] = cd.uniName;
     payload["phone"] = cd.phone;
@@ -29,7 +29,7 @@ std::string generateGoogleSheetsPayload(const ClientData& cd) {
         if (!cartDetails.empty()) {
             cartDetails += "|";
         }
-        cartDetails += std::to_string(item.first) + ":" + std::to_string(item.second);
+        cartDetails += item.first + ":" + std::to_string(item.second);
     }
     payload["cartDetails"] = cartDetails;
 
