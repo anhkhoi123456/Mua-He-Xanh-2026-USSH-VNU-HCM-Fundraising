@@ -95,8 +95,8 @@ std::string generateID(){ // numeric string Order ID generation.
                 .time_since_epoch()
         ).count();
 
-    uint32_t seq = counter.fetch_add(1);
+    uint32_t seq = counter.fetch_add(1) % 1000ULL;
 
-    timestamp * 1000ULL + seq;
-    return std::to_string(timestamp);
+    uint64_t id = timestamp * 1000ULL + seq;
+    return std::to_string(id);
 }
