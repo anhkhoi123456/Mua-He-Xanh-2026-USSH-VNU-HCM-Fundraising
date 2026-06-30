@@ -89,7 +89,7 @@ uint64_t generateID(){ // ID generation
 
     uint64_t timestamp =
         std::chrono::duration_cast<
-            std::chrono::microseconds
+            std::chrono::milliseconds
         >(
             std::chrono::system_clock::now()
                 .time_since_epoch()
@@ -97,5 +97,5 @@ uint64_t generateID(){ // ID generation
 
     uint32_t seq = counter.fetch_add(1);
 
-    return timestamp * 1000000ULL + seq;
+    return timestamp * 1000ULL + seq;
 }

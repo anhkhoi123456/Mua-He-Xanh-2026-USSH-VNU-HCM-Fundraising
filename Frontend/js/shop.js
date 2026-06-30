@@ -1,7 +1,4 @@
-
-
 /* Copyright (c) 2026 Tran Duong Anh Khoi. Licensed under the MIT License. */
-
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -9,66 +6,73 @@ document.addEventListener('DOMContentLoaded', () => {
     const productCards = document.querySelectorAll('.products-grid .card');
     const itemsCountSpan = document.querySelector('.items-count');
 
-    filterPills.forEach(pill => {
-        pill.addEventListener('click', () => {
-            const selectedFilter = pill.getAttribute('data-filter');
+    // --- FILTER LOGIC ---
+    if (filterPills.length > 0) {
+        filterPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                const selectedFilter = pill.getAttribute('data-filter');
 
-            // Handle the "Tất cả" (All) button vs specific filter pills
-            if (selectedFilter === 'all') {
-                filterPills.forEach(p => p.classList.remove('active'));
-                pill.classList.add('active');
-            } else {
-                pill.classList.toggle('active');
-                
-                const allPill = document.querySelector('.pill[data-filter="all"]');
-                if (allPill) allPill.classList.remove('active');
-            }
-
-            // Gather all currently active filters into an array
-            const activePills = document.querySelectorAll('.pill.active');
-            const activeFiltersList = Array.from(activePills).map(p => p.getAttribute('data-filter').toLowerCase());
-
-            // If user unclicks everything, default back to "All"
-            if (activeFiltersList.length === 0) {
-                const allPill = document.querySelector('.pill[data-filter="all"]');
-                if (allPill) allPill.classList.add('active');
-                activeFiltersList.push('all');
-            }
-
-            let visibleCount = 0;
-
-            productCards.forEach(card => {
-                const cardCategoryText = card.getAttribute('data-category') || '';
-                const cardCategories = cardCategoryText.trim().toLowerCase().split(/\s+/);
-
-                // Show card if "All" is active OR if card contains at least one active filter tag
-                const matchesFilter = activeFiltersList.includes('all') || 
-                                      activeFiltersList.some(filter => cardCategories.includes(filter));
-
-                if (matchesFilter) {
-                    card.style.display = ''; 
-                    visibleCount++;
+                // Handle the "Tất cả" (All) button vs specific filter pills
+                if (selectedFilter === 'all') {
+                    filterPills.forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
                 } else {
-                    card.style.display = 'none';
+                    pill.classList.toggle('active');
+                    
+                    const allPill = document.querySelector('.pill[data-filter="all"]');
+                    if (allPill) allPill.classList.remove('active');
+                }
+
+                // Gather all currently active filters into an array
+                const activePills = document.querySelectorAll('.pill.active');
+                const activeFiltersList = Array.from(activePills).map(p => p.getAttribute('data-filter').toLowerCase());
+
+                // If user unclicks everything, default back to "All"
+                if (activeFiltersList.length === 0) {
+                    const allPill = document.querySelector('.pill[data-filter="all"]');
+                    if (allPill) {
+                        allPill.classList.add('active');
+                        activeFiltersList.push('all');
+                    }
+                }
+
+                let visibleCount = 0;
+
+                productCards.forEach(card => {
+                    const cardCategoryText = card.getAttribute('data-category') || '';
+                    const cardCategories = cardCategoryText.trim().toLowerCase().split(/\s+/);
+
+                    // Show card if "All" is active OR if card contains at least one active filter tag
+                    const matchesFilter = activeFiltersList.includes('all') || 
+                                          activeFiltersList.some(filter => cardCategories.includes(filter));
+
+                    if (matchesFilter) {
+                        card.style.display = ''; 
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                if (itemsCountSpan) {
+                    itemsCountSpan.textContent = `${visibleCount} item${visibleCount !== 1 ? 's' : ''}`;
                 }
             });
-
-            if (itemsCountSpan) {
-                itemsCountSpan.textContent = `${visibleCount} item${visibleCount !== 1 ? 's' : ''}`;
-            }
         });
-    });
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const initialFilter = urlParams.get('filter');
+        // Handle URL parameters for initial filtering
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialFilter = urlParams.get('filter');
 
-    if (initialFilter) {
-        const targetPill = document.querySelector(`.pill[data-filter="${initialFilter}"]`);
-        if (targetPill) {
-            targetPill.click();
+        if (initialFilter) {
+            const targetPill = document.querySelector(`.pill[data-filter="${initialFilter}"]`);
+            if (targetPill) {
+                targetPill.click();
+            }
         }
     }
 
+    // --- CART LOGIC ---
     const addToCartButtons = document.querySelectorAll('.btn-add-to-cart');
     const cartButtons = document.querySelectorAll('.btn-cart');
     
@@ -83,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     updateCartUI(); 
 
-    // LINKED TO CART.HTML (New Click Event Added Here)
+    // LINKED TO CART.HTML
     cartButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             window.location.href = 'cart.html';
@@ -94,11 +98,12 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => {
             const card = button.closest('.card');
             
+            // Added Optional Chaining (?.) to prevent errors if elements are missing
             const product = {
-                id: card.getAttribute('data-id') || card.querySelector('h3').textContent.toLowerCase().replace(/\s+/g, '-'),
-                title: card.querySelector('h3').textContent,
-                price: parseInt(card.querySelector('.card-price').textContent.replace(/[^0-9]/g, '')) || 0,
-                image: card.querySelector('.card-image').getAttribute('src') || 'images/placeholder.png'
+                id: card.getAttribute('data-id') || card.querySelector('h3')?.textContent.toLowerCase().replace(/\s+/g, '-') || 'unknown-item',
+                title: card.querySelector('h3')?.textContent || 'Unknown Item',
+                price: parseInt(card.querySelector('.card-price')?.textContent.replace(/[^0-9]/g, '')) || 0,
+                image: card.querySelector('.card-image')?.getAttribute('src') || 'images/placeholder.png'
             };
 
             const existingItem = cart.find(item => item.id === product.id);
@@ -122,36 +127,40 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // --- LIGHTBOX LOGIC ---
     const lightbox = document.getElementById('imageLightbox');
     const lightboxImg = document.getElementById('lightboxImage');
     const lightboxClose = document.querySelector('.lightbox-close');
     const productImages = document.querySelectorAll('.card-image');
 
-    productImages.forEach(img => {
-        img.addEventListener('click', (e) => {
-            lightbox.style.display = 'flex'; 
-            lightboxImg.src = img.src;
-            lightboxImg.alt = img.alt;
-            document.body.style.overflow = 'hidden'; 
+    // Only run lightbox code if the lightbox elements actually exist on this HTML page
+    if (lightbox && lightboxImg && lightboxClose) {
+        productImages.forEach(img => {
+            img.addEventListener('click', (e) => {
+                lightbox.style.display = 'flex'; 
+                lightboxImg.src = img.src;
+                lightboxImg.alt = img.alt;
+                document.body.style.overflow = 'hidden'; 
+            });
         });
-    });
 
-    function closeLightbox() {
-        lightbox.style.display = 'none';
-        document.body.style.overflow = ''; 
+        function closeLightbox() {
+            lightbox.style.display = 'none';
+            document.body.style.overflow = ''; 
+        }
+
+        lightboxClose.addEventListener('click', closeLightbox);
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.style.display === 'flex') {
+                closeLightbox();
+            }
+        });
     }
-
-    lightboxClose.addEventListener('click', closeLightbox);
-
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) {
-            closeLightbox();
-        }
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && lightbox.style.display === 'flex') {
-            closeLightbox();
-        }
-    });
 });
