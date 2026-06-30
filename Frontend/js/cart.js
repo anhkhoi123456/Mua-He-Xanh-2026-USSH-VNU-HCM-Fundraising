@@ -132,15 +132,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
-                // Đối tượng payload khớp hoàn toàn với cấu trúc struct ClientData của C++
                 const finalOrderPayload = {
+                    orderID: "", // To match the struct ClientData.
                     fullName: document.getElementById('customer-name').value,
                     uniName: document.getElementById('customer-uni').value,
                     phone: document.getElementById('customer-phone').value,
                     zaloPhone: document.getElementById('customer-zalo').value || document.getElementById('customer-phone').value,
                     email: document.getElementById('customer-email').value,
                     deliveryAddress: document.getElementById('customer-address').value,
-                    productCount: productCountMap // Khớp tên trường 'productCount'
+                    productCount: productCountMap,
+                    totalProductCount: 0, // Dummy Payload
+                    totalMoneyCount: 0 // Dummy Payload
                 };
 
                 console.log("=== OUTBOUND BACKEND CHECKOUT JSON DATA POOL ===");
