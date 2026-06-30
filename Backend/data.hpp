@@ -12,15 +12,15 @@
 
 struct ClientData {
     std::string orderID, fullName, uniName, phone, zaloPhone, email, deliveryAddress;
-        
-    // Now uses int keys to handle your 7-digit ID codes safely
+
+    // Number of products into format ID : Count.
     std::unordered_map<std::string, int> productCount;
     unsigned int totalProductCount = 0;
     uint64_t totalMoneyCount = 0;
 };
 
 void calculateTotals(ClientData& cd);
-uint64_t generateID();
+std::string generateID();
 void loadPricesFromGoogle();
 
 #endif

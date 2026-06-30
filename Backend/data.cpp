@@ -84,7 +84,7 @@ void calculateTotals(ClientData& cd){
     }
 }
 
-uint64_t generateID(){ // ID generation
+std::string generateID(){ // numeric string Order ID generation.
     static std::atomic<uint32_t> counter{0};
 
     uint64_t timestamp =
@@ -97,5 +97,6 @@ uint64_t generateID(){ // ID generation
 
     uint32_t seq = counter.fetch_add(1);
 
-    return timestamp * 1000ULL + seq;
+    timestamp * 1000ULL + seq;
+    return std::to_string(timestamp);
 }

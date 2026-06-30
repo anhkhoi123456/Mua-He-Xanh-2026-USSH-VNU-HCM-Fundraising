@@ -119,12 +119,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                // 🌟 CHUẨN HÓA DỮ LIỆU CHO BACKEND C++ (std::unordered_map<std::string, int>)
+                // Convert product ID to string
                 const productCountMap = {};
                 cart.forEach(item => {
-                    // Đảm bảo ID là chuỗi số sạch (numeric string) bằng cách lọc bỏ khoảng trắng hoặc ký tự lạ
-                    const numericStringId = String(item.id).trim(); 
-                    // Đảm bảo số lượng luôn được ép kiểu về số nguyên (int)
+                    const numericStringId = String(item.id).trim();
                     const quantityInt = parseInt(item.quantity, 10) || 0;
 
                     if (productCountMap[numericStringId]) {
