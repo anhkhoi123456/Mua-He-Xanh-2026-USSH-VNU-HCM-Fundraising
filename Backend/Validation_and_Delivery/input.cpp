@@ -32,15 +32,14 @@ bool parseFrontendRequest(const std::string& jsonRequestBody, ClientData& outCli
             
             for (auto& item : cartItems.items()) {
                 try {
-                    // Force cast whatever string key sent by the frontend into an integer code
-                    int productID = std::stoi(item.key());
+                    std::string productID = item.key();
                     int quantity  = item.value().get<int>();
 
                     // Feed it straight to the struct. data.cpp will deal with invalid/missing IDs later.
                     outClientData.productCount[productID] = quantity;
                 }
                 catch (const std::exception& innerEx) {
-                    // Catch casting errors (e.g., if a key cannot be formatted to int) and skip it safely
+                    // Catch casting errors (e.g., if a quantity cannot be formatted to int) and skip it safely
                     std::cerr << "[INPUT] Skipping malformed cart property key: " 
                               << item.key() << " | Reason: " << innerEx.what() << std::endl;
                 }

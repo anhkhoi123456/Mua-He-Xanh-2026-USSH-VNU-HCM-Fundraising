@@ -11,11 +11,10 @@
 #include <cstdint>
 
 struct ClientData {
-    uint64_t orderID;
-    std::string fullName, uniName, phone, zaloPhone, email, deliveryAddress;
+    std::string orderID, fullName, uniName, phone, zaloPhone, email, deliveryAddress;
         
     // Now uses int keys to handle your 7-digit ID codes safely
-    std::unordered_map<int, int> productCount;
+    std::unordered_map<std::string, int> productCount;
     unsigned int totalProductCount = 0;
     uint64_t totalMoneyCount = 0;
 };

@@ -14,14 +14,14 @@
 #include "json.hpp"
 
 // Price table with int keys - O(1) lookup
-std::unordered_map<int, uint64_t> priceTable;
+std::unordered_map<std::string, uint64_t> priceTable;
 
 void loadPricesFromGoogle() {
     std::cout << "[SYSTEM] Connecting to Google Sheets to fetch product database..." << std::endl;
 
     // Connect to Google Docs via HTTPS
     httplib::Client cli("https://docs.google.com");
-    cli.set_follow_location(true); // 🌟 CRITICAL: Google Sheets uses redirects, this tells httplib to follow them
+    cli.set_follow_location(true); // CRITICAL: Google Sheets uses redirects, this tells httplib to follow them
 
     // Replace these with your actual DOC_ID and GID
     std::string docId = "14SKc8HEgUXFGW3jCat5TE54wZJIr76FqM-oFX6oBzxk";
@@ -50,15 +50,13 @@ void loadPricesFromGoogle() {
                 std::getline(lineStream, nameStr, '\t') && 
                 std::getline(lineStream, priceStr, '\t')) {
                 
-                try {
-                    int id = std::stoi(idStr);
-                    
+                try {                    
                     priceStr.erase(std::remove_if(priceStr.begin(), priceStr.end(), [](char c) {
                         return !std::isdigit(static_cast<unsigned char>(c));
                     }), priceStr.end());
 
                     uint64_t price = std::stoull(priceStr);
-                    priceTable[id] = price;
+                    priceTable[idStr] = price;
                     loadedCount++;
                 }
                 catch (const std::exception& e) {
@@ -78,11 +76,11 @@ void calculateTotals(ClientData& cd){
     cd.totalMoneyCount = 0;
 
     for(auto& i : cd.productCount){
-        auto price = priceTable.find(i.first);
-        if(price != priceTable.end()){
+        auto searchRes = priceTable.find(i.first);
+        if(searchRes != priceTable.end()){
             cd.totalProductCount += i.second;
-            cd.totalMoneyCount += i.second * (*price).second;
-        } // If not exist, it will skip to prevent crash.
+            cd.totalMoneyCount += i.second * searchRes -> second;
+        }
     }
 }
 
