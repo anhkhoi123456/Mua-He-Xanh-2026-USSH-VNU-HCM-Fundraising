@@ -1,7 +1,4 @@
-
-
 // Copyright (c) 2026 Tran Duong Anh Khoi. Licensed under the MIT License.
-
 
 #include "httplib.h"
 #include "json.hpp"
@@ -10,6 +7,7 @@
 #include "output.hpp"
 #include <iostream>
 #include <string>
+#include <thread>
 
 using json = nlohmann::json;
 
@@ -52,42 +50,38 @@ int main() {
         // Step B: Execute internal logic, calculations, and ID assignment (data.cpp)
         calculateTotals(orderContext);
 
-        // Step C: Generate outgoing JSON payload (output.cpp)
-        std::string sheetPayload = generateGoogleSheetsPayload(orderContext);
+        std::thread googleSheetThread([orderContext]() {
+            try {
+                // Step C: Generate outgoing JSON payload (output.cpp)
+                std::string sheetPayload = generateGoogleSheetsPayload(orderContext);
 
-        // Step D: Transmit payload to Google Sheets Database
-        httplib::Client cli("https://script.google.com");
-        
-        // CRITICAL: Must be enabled to follow Google Apps Script 302 redirects
-        cli.set_follow_location(true); 
-        std::string webhookPath = "/macros/s/AKfycbzNw3gNwCJIOby4jEY-B3e4tSY0ewHUMoVqSTR_xkKSG24hvH3zQcJQj10qTUxX3p4lrA/exec";
+                // Step D: Transmit payload to Google Sheets Database
+                httplib::Client cli("https://script.google.com");
+                cli.set_follow_location(true); 
+                std::string webhookPath = "/macros/s/AKfycbzNw3gNwCJIOby4jEY-B3e4tSY0ewHUMoVqSTR_xkKSG24hvH3zQcJQj10qTUxX3p4lrA/exec";
 
-        auto googleRes = cli.Post(webhookPath.c_str(), sheetPayload, "application/json");
-        
-        // Step E: Evaluate Webhook Response
-        bool deliveryStatus = (googleRes && googleRes->status == 200);
-        
-        if (deliveryStatus) {
-            std::cout << "[SERVER] Order ID: " << orderContext.orderID 
-                      << " securely dispatched to Google Sheets." << std::endl;
-        } else {
-            std::cerr << "[SERVER ERROR] Webhook dispatch failed. HTTP Status: " 
-                      << (googleRes ? std::to_string(googleRes->status) : "Connection timeout/dropped") << std::endl;
-        }
+                auto googleRes = cli.Post(webhookPath.c_str(), sheetPayload, "application/json");
+                
+                if (googleRes && (googleRes->status == 200 || googleRes->status == 302)) {
+                    std::cout << "[ASYNC OK] Order ID: " << orderContext.orderID 
+                              << " securely dispatched to Google Sheets." << std::endl;
+                } else {
+                    std::cerr << "[ASYNC WARNING] Webhook dispatch completed with non-standard status: " 
+                              << (googleRes ? std::to_string(googleRes->status) : "Connection dropped") << std::endl;
+                }
+            } 
+            catch (const std::exception& e) {
+                std::cerr << "[ASYNC CRITICAL ERROR] Thread crash: " << e.what() << std::endl;
+            }
+        });
 
-        // Step F: Construct response back to Frontend (cart.js)
+        googleSheetThread.detach(); 
+
         json responseJson;
-        if (deliveryStatus) {
-            responseJson["status"] = "success";
-            responseJson["orderID"] = orderContext.orderID; 
-            res.status = 200; // OK
-        } else {
-            responseJson["status"] = "partial_success";
-            responseJson["message"] = "Order calculated locally, but database backup delayed.";
-            responseJson["orderID"] = orderContext.orderID;
-            res.status = 502; // Bad Gateway
-        }
-
+        responseJson["status"] = "success";
+        responseJson["orderID"] = orderContext.orderID; 
+        
+        res.status = 200; // Đảm bảo luôn trả về 200 OK cho khách vui
         res.set_content(responseJson.dump(), "application/json");
     });
 
