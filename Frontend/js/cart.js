@@ -164,21 +164,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log("Backend response received:", data);
 
                 // Only show success if the backend confirmed it
+                // Only show success if the backend confirmed it
                 if (data.status === "success" || data.status === "partial_success") {
                     
-                    // 1. Xóa giỏ hàng vì đơn đã lên server thành công
+                    // 1. Tính tổng số tiền gốc (kiểu số nguyên, VD: 150000) để truyền URL
+                    let rawTotal = 0;
+                    cart.forEach(item => {
+                        rawTotal += (item.price * item.quantity);
+                    });
+
+                    // 2. Xóa giỏ hàng vì đã đẩy đơn lên C++ thành công
                     localStorage.removeItem('site_cart'); 
 
-                    // 2. Chuyển hướng sang trang checkout.html kèm tham số
-                    window.location.href = `checkout.html?id=${data.orderID}&amount=${data.totalMoneyCount}`;
-                    
+                    // 3. 🚀 CHUYỂN HƯỚNG SANG TRANG CHECKOUT KÈM PARAMETERS
+                    window.location.href = `checkout.html?id=${data.orderID}&amount=${rawTotal}`;
+
                 } else {
-                    if(submitBtn) {
-                        submitBtn.disabled = false;
-                        submitBtn.innerText = "Xác nhận đặt hàng";
-                    }
                     throw new Error(data.message || "Unknown server error");
-                }
+}
 
             } catch (error) {
                 console.error("Order submission failure:", error);
