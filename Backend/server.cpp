@@ -80,6 +80,8 @@ int main() {
         json responseJson;
         responseJson["status"] = "success";
         responseJson["orderID"] = orderContext.orderID; 
+
+        responseJson["totalMoneyCount"] = orderContext.totalMoneyCount;
         
         res.status = 200; // Đảm bảo luôn trả về 200 OK cho khách vui
         res.set_content(responseJson.dump(), "application/json");

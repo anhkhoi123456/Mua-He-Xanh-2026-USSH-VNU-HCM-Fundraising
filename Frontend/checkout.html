@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán Đơn Hàng - Mùa Hè Xanh</title>
+    <link rel="stylesheet" href="css/secret.css">
+    <link rel="stylesheet" href="css/checkoutStyle.css">
+    <style>
+        /* Thêm một chút style để căn giữa mã QR cho đẹp */
+        .payment-container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .qr-code-display {
+            width: 100%;
+            max-width: 300px;
+            margin: 20px 0;
+            border: 5px solid #f1f8f5;
+            border-radius: 10px;
+        }
+        .order-id-badge {
+            background: #e8f5e9;
+            color: #15794c;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header class="cart-sticky-navbar">
+        <div class="navbar-inner">
+            <a href="shop.html" class="back-link">← Quay lại cửa hàng</a>
+            <div class="secret-wrapper">
+                <img id="secret-logo" src="images/Logo-DH-Cong-Nghe-Thong-Tin-UIT-1024x828-863331665.webp" alt="Secret Logo" style="height: 60px;">
+                <div class="secret-tooltip">Coded by UIT-er</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="payment-container">
+            <h2 style="color: #15794c;">Thanh toán đơn hàng</h2>
+            <p>Cảm ơn bạn đã đồng hành cùng chiến dịch!</p>
+            
+            <div style="margin: 20px 0; border-top: 1px solid #eee; padding-top: 20px;">
+                <p>Mã đơn hàng: <span id="display-order-id" class="order-id-badge">Đang tải...</span></p>
+                <p>Số tiền cần chuyển: <strong id="display-total-amount" style="font-size: 1.5rem; color: #dc2626;">0</strong> <strong>VND</strong></p>
+            </div>
+
+            <div class="qr-container">
+                <img id="sepay-qr-image" class="qr-code-display" src="" alt="Đang tạo mã QR thanh toán...">
+            </div>
+
+            <div class="payment-instruction">
+                <p><strong>Hướng dẫn:</strong> Mở App Ngân hàng, quét mã QR này và thực hiện chuyển khoản. Nội dung chuyển khoản đã được tích hợp sẵn.</p>
+                <p style="font-size: 0.8rem; color: #666; margin-top: 10px;"><i>Hệ thống sẽ gửi email xác nhận ngay khi thủ quỹ duyệt đơn của bạn.</i></p>
+            </div>
+
+            <a href="shop.html" class="btn-order-submit" style="text-decoration: none; display: inline-block; margin-top: 20px;">Hoàn tất & Quay về</a>
+        </div>
+    </main>
+
+    <script src="js/checkout.js"></script>
+    <script src="js/secret.js"></script>
+</body>
+</html>

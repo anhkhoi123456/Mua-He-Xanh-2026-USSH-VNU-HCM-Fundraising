@@ -1,14 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const listContainer = document.getElementById('cart-list-container');
     const totalPriceDisplay = document.getElementById('summary-total-price');
-    const stickyHeaderTotalDisplay = document.getElementById('sticky-header-total'); // 🌟 New Sticky element reference
+    const stickyHeaderTotalDisplay = document.getElementById('sticky-header-total'); 
     const orderForm = document.getElementById('order-submission-form');
     const clearCartBtn = document.getElementById('btn-clear-cart');
-    
-    // Modal Variables
-    const confirmModal = document.getElementById('orderConfirmModal');
-    const confirmTotalMsg = document.getElementById('confirm-total-msg');
-    const btnCloseConfirm = document.getElementById('btn-close-confirm');
 
     let cart = JSON.parse(localStorage.getItem('site_cart')) || [];
 
@@ -16,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cart.length === 0) {
             listContainer.innerHTML = `<p class="empty-message">Đơn hàng của bạn đang trống</p>`;
             totalPriceDisplay.textContent = '0 VND';
-            if (stickyHeaderTotalDisplay) stickyHeaderTotalDisplay.textContent = 'Tổng: 0 VND'; // 🌟 Handle empty states
+            if (stickyHeaderTotalDisplay) stickyHeaderTotalDisplay.textContent = 'Tổng: 0 VND'; 
             if (clearCartBtn) clearCartBtn.style.display = 'none'; 
             return;
         }
@@ -55,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Synchronize display text fields simultaneously 
         totalPriceDisplay.textContent = formattedPriceString;
         if (stickyHeaderTotalDisplay) {
-            stickyHeaderTotalDisplay.textContent = `Tổng: ${formattedPriceString}`; // 🌟 Synchronize Sticky header view state
+            stickyHeaderTotalDisplay.textContent = `Tổng: ${formattedPriceString}`; 
         }
         
         bindCartEvents();
@@ -110,114 +105,90 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (orderForm) {
-        if (orderForm) {
-            orderForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
+        orderForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-                if (cart.length === 0) {
-                    alert("Đơn hàng của bạn còn trống.");
-                    return;
-                }
+            if (cart.length === 0) {
+                alert("Đơn hàng của bạn còn trống.");
+                return;
+            }
 
-                // Convert product ID to string
-                const productCountMap = {};
-                cart.forEach(item => {
-                    const numericStringId = String(item.id).trim();
-                    const quantityInt = parseInt(item.quantity, 10) || 0;
+            // Convert product ID to string
+            const productCountMap = {};
+            cart.forEach(item => {
+                const numericStringId = String(item.id).trim();
+                const quantityInt = parseInt(item.quantity, 10) || 0;
 
-                    if (productCountMap[numericStringId]) {
-                        productCountMap[numericStringId] += quantityInt;
-                    } else {
-                        productCountMap[numericStringId] = quantityInt;
-                    }
-                });
-
-                const finalOrderPayload = {
-                    orderID: "", // To match the struct ClientData.
-                    fullName: document.getElementById('customer-name').value,
-                    uniName: document.getElementById('customer-uni').value,
-                    phone: document.getElementById('customer-phone').value,
-                    zaloPhone: document.getElementById('customer-zalo').value || document.getElementById('customer-phone').value,
-                    email: document.getElementById('customer-email').value,
-                    deliveryAddress: document.getElementById('customer-address').value,
-                    productCount: productCountMap,
-                    totalProductCount: 0, // Dummy Payload
-                    totalMoneyCount: 0 // Dummy Payload
-                };
-
-                console.log("=== OUTBOUND BACKEND CHECKOUT JSON DATA POOL ===");
-                console.log(JSON.stringify(finalOrderPayload, null, 2));
-
-                try {
-                    // FORCE the request to go directly to your Docker backend domain
-                    const response = await fetch('https://mua-he-xanh-2026-ussh-vnu-hcm-fundraising.onrender.com/api/checkout', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(finalOrderPayload)
-                    });
-                    
-                    if (!response.ok) throw new Error('Failed to post');
-
-                    // CRITICAL: Consume the backend response body to close the network stream cleanly!
-                    const data = await response.json(); 
-                    console.log("Backend response received:", data);
-
-                    // Only show success if the backend confirmed it
-                    if (data.status === "success" || data.status === "partial_success") {
-                        const currentTotalStr = document.getElementById('summary-total-price').textContent;
-                        confirmTotalMsg.textContent = `Tổng cộng: ${currentTotalStr}`;
-                        
-                        confirmModal.style.display = 'flex';
-                        document.body.style.overflow = 'hidden'; 
-                    } else {
-                        throw new Error(data.message || "Unknown server error");
-                    }
-
-                } catch (error) {
-                    console.error("Order submission failure:", error);
-                    alert("Lỗi kết nối đến máy chủ. Vui lòng thử lại sau.");
+                if (productCountMap[numericStringId]) {
+                    productCountMap[numericStringId] += quantityInt;
+                } else {
+                    productCountMap[numericStringId] = quantityInt;
                 }
             });
-        }
-    }
 
-    if (btnCloseConfirm) {
-        btnCloseConfirm.addEventListener('click', () => {
-            localStorage.removeItem('site_cart'); 
-            window.location.href = 'shop.html';   
-        });
-    }
+            const finalOrderPayload = {
+                orderID: "", // To match the struct ClientData.
+                fullName: document.getElementById('customer-name').value,
+                uniName: document.getElementById('customer-uni').value,
+                phone: document.getElementById('customer-phone').value,
+                zaloPhone: document.getElementById('customer-zalo').value || document.getElementById('customer-phone').value,
+                email: document.getElementById('customer-email').value,
+                deliveryAddress: document.getElementById('customer-address').value,
+                productCount: productCountMap,
+                totalProductCount: 0, // Dummy Payload
+                totalMoneyCount: 0 // Dummy Payload
+            };
 
-    const lightbox = document.getElementById('imageLightbox');
-    const lightboxImg = document.getElementById('lightboxImage');
-    const lightboxClose = document.querySelector('.lightbox-close');
-    const qrCodeImg = document.querySelector('.qr-code');
+            console.log("=== OUTBOUND BACKEND CHECKOUT JSON DATA POOL ===");
+            console.log(JSON.stringify(finalOrderPayload, null, 2));
 
-    if (qrCodeImg && lightbox) {
-        qrCodeImg.style.cursor = 'zoom-in';
+            try {
+                // Khóa nút submit để tránh spam click
+                const submitBtn = orderForm.querySelector('button[type="submit"]');
+                if(submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = "Đang xử lý...";
+                }
 
-        qrCodeImg.addEventListener('click', () => {
-            lightbox.style.display = 'flex';
-            lightboxImg.src = qrCodeImg.src;
-            document.body.style.overflow = 'hidden'; 
-        });
+                // FORCE the request to go directly to your Docker backend domain
+                const response = await fetch('https://mua-he-xanh-2026-ussh-vnu-hcm-fundraising.onrender.com/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(finalOrderPayload)
+                });
+                
+                if (!response.ok) throw new Error('Failed to post');
 
-        function closeLightbox() {
-            lightbox.style.display = 'none';
-            document.body.style.overflow = ''; 
-        }
+                // CRITICAL: Consume the backend response body to close the network stream cleanly!
+                const data = await response.json(); 
+                console.log("Backend response received:", data);
 
-        lightboxClose.addEventListener('click', closeLightbox);
+                // Only show success if the backend confirmed it
+                if (data.status === "success" || data.status === "partial_success") {
+                    
+                    // 1. Xóa giỏ hàng vì đơn đã lên server thành công
+                    localStorage.removeItem('site_cart'); 
 
-        lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) {
-                closeLightbox();
-            }
-        });
+                    // 2. Chuyển hướng sang trang checkout.html kèm tham số
+                    window.location.href = `checkout.html?id=${data.orderID}&amount=${data.totalMoneyCount}`;
+                    
+                } else {
+                    if(submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = "Xác nhận đặt hàng";
+                    }
+                    throw new Error(data.message || "Unknown server error");
+                }
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && lightbox.style.display === 'flex') {
-                closeLightbox();
+            } catch (error) {
+                console.error("Order submission failure:", error);
+                alert("Lỗi kết nối đến máy chủ. Vui lòng thử lại sau.");
+                
+                const submitBtn = orderForm.querySelector('button[type="submit"]');
+                if(submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "Xác nhận đặt hàng";
+                }
             }
         });
     }
