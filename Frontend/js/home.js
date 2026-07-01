@@ -3,9 +3,9 @@
 /* Copyright (c) 2026 Tran Duong Anh Khoi. Licensed under the MIT License. */
 
 
-const API_URL = 'https://api.yourwebsite.com/fundraiser-stats'; 
+// const API_URL = 'https://api.yourwebsite.com/fundraiser-stats'; 
 const FALLBACK_RAISED = 9280000; 
-const FALLBACK_GOAL = 16000000;
+const FALLBACK_GOAL = 18000000;
 
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -28,18 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     async function fetchFundraiserData() {
-        try {
-            const response = await fetch(API_URL);
-            if (!response.ok) throw new Error('Network error');
-            
-            const data = await response.json();
-            updateLiveTracker(data.currentRaised, data.targetGoal);
-            
-        } catch (error) {
-            console.warn("Backend API offline or placeholder URL used. Falling back to local data.");
-            // Uses real progress values so the user dashboard stays filled
             updateLiveTracker(FALLBACK_RAISED, FALLBACK_GOAL); 
-        }
     }
 
     function updateLiveTracker(raised, goal) {
