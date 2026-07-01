@@ -6,13 +6,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const productCards = document.querySelectorAll('.products-grid .card');
     const itemsCountSpan = document.querySelector('.items-count');
 
-    // --- FILTER LOGIC ---
+    // ==========================================
+    // --- 1. FILTER LOGIC ---
+    // ==========================================
     if (filterPills.length > 0) {
+        
+        // Cập nhật số lượng ngay khi vừa tải trang
+        if (itemsCountSpan && productCards.length > 0) {
+            itemsCountSpan.textContent = `${productCards.length} item${productCards.length !== 1 ? 's' : ''}`;
+        }
+
         filterPills.forEach(pill => {
             pill.addEventListener('click', () => {
                 const selectedFilter = pill.getAttribute('data-filter');
 
-                // Handle the "Tất cả" (All) button vs specific filter pills
                 if (selectedFilter === 'all') {
                     filterPills.forEach(p => p.classList.remove('active'));
                     pill.classList.add('active');
@@ -23,11 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (allPill) allPill.classList.remove('active');
                 }
 
-                // Gather all currently active filters into an array
                 const activePills = document.querySelectorAll('.pill.active');
                 const activeFiltersList = Array.from(activePills).map(p => p.getAttribute('data-filter').toLowerCase());
 
-                // If user unclicks everything, default back to "All"
                 if (activeFiltersList.length === 0) {
                     const allPill = document.querySelector('.pill[data-filter="all"]');
                     if (allPill) {
@@ -42,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const cardCategoryText = card.getAttribute('data-category') || '';
                     const cardCategories = cardCategoryText.trim().toLowerCase().split(/\s+/);
 
-                    // Show card if "All" is active OR if card contains at least one active filter tag
                     const matchesFilter = activeFiltersList.includes('all') || 
                                           activeFiltersList.some(filter => cardCategories.includes(filter));
 
@@ -60,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Handle URL parameters for initial filtering
         const urlParams = new URLSearchParams(window.location.search);
         const initialFilter = urlParams.get('filter');
 
@@ -72,7 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- CART LOGIC ---
+    // ==========================================
+    // --- 2. CART LOGIC ---
+    // ==========================================
     const addToCartButtons = document.querySelectorAll('.btn-add-to-cart');
     const cartButtons = document.querySelectorAll('.btn-cart');
     
@@ -127,7 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- LIGHTBOX LOGIC ---
+    // ==========================================
+    // --- 3. LIGHTBOX LOGIC ---
+    // ==========================================
     const lightbox = document.getElementById('imageLightbox');
     const lightboxImg = document.getElementById('lightboxImage');
     const lightboxClose = document.querySelector('.lightbox-close');

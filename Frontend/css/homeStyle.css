@@ -68,8 +68,7 @@ header {
     align-items: center;
 }
 
-.org-name {
-    font-weight: 700;
+.footer-text {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -77,6 +76,7 @@ header {
 
 .logo span {
     color: var(--primary);
+    align-items: center;
 }
 
 /* Buttons */
@@ -341,7 +341,6 @@ footer {
     color: var(--muted);
     font-size: 0.9rem;
 }
-
 /* Responsive Styles */
 @media (max-width: 992px) {
     .hero, .mission-grid, .impact-grid {

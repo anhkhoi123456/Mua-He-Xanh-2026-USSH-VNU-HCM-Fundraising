@@ -11,17 +11,16 @@
     <title>Review Cart</title>
     <link rel="stylesheet" href="css/secret.css">
     <link rel="stylesheet" href="css/cartStyle.css">
-    
 </head>
 <body>
     <header class="cart-sticky-navbar">
         <div class="navbar-inner" style="display: flex; align-items: center; gap: 12px;">
             <a href="shop.html" class="back-link">← Tiếp tục mua sắm</a>
                 
-        <div class="secret-wrapper">
-            <img id="secret-logo" src="images\Logo-DH-Cong-Nghe-Thong-Tin-UIT-1024x828-863331665.webp" alt="Secret Logo" style="height: 60px; width: auto;">
-            <div class="secret-tooltip">Coded by UIT-er</div>
-        </div>
+            <div class="secret-wrapper">
+                <img id="secret-logo" src="images/Logo-DH-Cong-Nghe-Thong-Tin-UIT-1024x828-863331665.webp" alt="Secret Logo" style="height: 60px; width: auto;">
+                <div class="secret-tooltip">Coded by UIT-er</div>
+            </div>
 
             <div class="cart-title-right" style="margin-left: auto;">
                 <span class="cart-title-header" style="margin-right: 12px;">Kiểm tra giỏ hàng</span>
@@ -29,14 +28,13 @@
             </div>
         </div>
     </header>
-    <div class="container">
-        
 
+    <div class="container">
         <main class="cart-layout">
             <section class="cart-items-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <h2 style="margin: 0;">Bên trong giỏ hàng</h2>
-                    <button id="btn-clear-cart" class="btn" style="background-color: var(--danger, #DC2626); color: white; display: none; padding: 6px 12px; font-size: 14px; border: none; cursor: pointer;">Xóa tất cả</button>
+                    <button id="btn-clear-cart" class="btn" style="background-color: var(--danger, #DC2626); color: white; display: none; padding: 6px 12px; font-size: 14px; border: none; cursor: pointer; border-radius: 6px;">Xóa tất cả</button>
                 </div>
                 
                 <div id="cart-list-container">
@@ -48,22 +46,23 @@
                     <h3>Tổng đơn hàng</h3>
                     <div class="summary-row">
                         <span>Thành tiền</span>
-                        <span id="summary-total-price">0 VND</span>
+                        <span id="summary-total-price" style="font-weight: 700; color: var(--primary);">0 VND</span>
                     </div>
-                </div>
-                <hr>
+                    
+                    <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border);">
 
                     <div class="payment-section">
                         <h4>Thanh toán qua chuyển khoản</h4>
                         <p class="payment-instruction">
                             Quét mã QR dưới đây để thanh toán. <br>
-                            Nội dung CK: <strong>[Họ và tên] - [SĐT] - [Tên trường]</strong>
+                            Nội dung CK: <strong style="color: var(--primary);">[Họ và tên] - [SĐT] - [Tên trường]</strong>
                         </p>
                         <div class="qr-container">
-                            <img src="images\placeholder.webp" alt="Mã QR Thanh toán" class="qr-code" onerror="this.src='images/qrCode.webp';">
+                            <img src="images/placeholder.webp" alt="Mã QR Thanh toán" class="qr-code" onerror="this.src='images/qrCode.webp';">
                         </div>
                     </div>
-                    <hr>
+                    
+                    <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border);">
                     
                     <form id="order-submission-form">
                         <label for="customer-name">Họ và Tên</label>
@@ -79,7 +78,7 @@
                         <input type="tel" id="customer-phone" placeholder="vd: 0123456789" required>
 
                         <label for="customer-zalo">Zalo Phone Number</label>
-                        <input type="tel" id="customer-zalo" placeholder="vd: 0123456789 (Để trống nếu trùng với số điện thoại.)">
+                        <input type="tel" id="customer-zalo" placeholder="vd: 0123456789 (Để trống nếu trùng...)">
 
                         <label for="customer-email">Email Address</label>
                         <input type="email" id="customer-email" placeholder="abc@gmail.com" required>
@@ -91,10 +90,14 @@
         </main>
     </div>
 
-    <footer class="site-footer">
-        <div class="container footer-container">
-            <div><strong>TRƯỜNG ĐẠI HỌC KHOA HỌC XÃ HỘI VÀ NHÂN VĂN, ĐHQG-HCM</strong></div>
-            <div>100% lợi nhuận sẽ được dùng để quyên góp gây quỹ.</div>
+    <footer>
+        <div class="container footer-flex">
+            <div class="footer-text">
+                <p style="margin: 0;"><strong>Đại diện gây quỹ đội hình</strong><br>Tel: 0903982703, Email: 2557030092@hcmussh.edu.vn</p>
+            </div>
+            <div class="contact">
+                100% lợi nhuận sẽ được dùng để quyên góp gây quỹ.
+            </div>
         </div>
     </footer>
 
@@ -105,11 +108,11 @@
 
     <div id="orderConfirmModal" class="lightbox-modal" style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000;">
         <div class="modal-content" style="background: white; padding: 30px; border-radius: 8px; text-align: center; max-width: 400px; width: 90%;">
-            <h3 style="color: #059669; margin-top: 0;">🎉 Đặt hàng thành công!</h3>
+            <h3 style="color: var(--primary, #059669); margin-top: 0;">🎉 Đặt hàng thành công!</h3>
             <p>Cảm ơn bạn đã đồng hành và ủng hộ chiến dịch gây quỹ Mùa hè xanh 2026.</p>
-            <p id="confirm-total-msg" style="font-weight: bold; font-size: 1.1em; color: var(--text-dark, #1F2937);"></p>
-            <p style="font-size: 0.9em; color: #6B7280;">Vui lòng kiểm tra email của bạn để nhận hóa đơn xác nhận hệ thống.</p>
-            <button id="btn-close-confirm" class="btn" style="background-color: #059669; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; margin-top: 15px; width: 100%;">Xác nhận & Quay về cửa hàng</button>
+            <p id="confirm-total-msg" style="font-weight: bold; font-size: 1.1em; color: var(--text, #1F2937);"></p>
+            <p style="font-size: 0.9em; color: var(--muted, #6B7280);">Vui lòng kiểm tra email của bạn để nhận hóa đơn xác nhận hệ thống.</p>
+            <button id="btn-close-confirm" class="btn" style="background-color: var(--primary, #059669); color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 6px; cursor: pointer; margin-top: 15px; width: 100%;">Xác nhận & Quay về cửa hàng</button>
         </div>
     </div>
 
