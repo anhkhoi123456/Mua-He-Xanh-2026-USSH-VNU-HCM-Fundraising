@@ -59,6 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Cập nhật giao diện thanh Progress Bar
     function updateLiveTracker(raised, goal) {
+        console.log(`Hàm updateLiveTracker VỪA BỊ GỌI! Số tiền: ${raised}`);
+        console.trace();
+
         const percentage = Math.min(Math.round((raised / goal) * 100), 100);
 
         const raisedDisplay = document.getElementById('raised-display');
