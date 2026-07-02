@@ -3,7 +3,7 @@
 // Gắn link API của bạn vào đây (Ví dụ: Link Google Apps Script Web App hoặc link Server C++ của bạn)
 const API_URL = 'https://script.google.com/macros/s/AKfycby6yAlVXBruKYRGN94xtjD8Jin9FEQjrq8cNGtnJdNR-PcgrGwgw1nhrXIUHWBw8RNF8g/exec'; 
 
-const FALLBACK_RAISED = 9280000; 
+const FALLBACK_RAISED = 0; 
 const FALLBACK_GOAL = 18000000;
 
 document.addEventListener('DOMContentLoaded', () => {
