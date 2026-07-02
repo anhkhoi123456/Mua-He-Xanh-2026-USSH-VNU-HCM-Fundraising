@@ -27,7 +27,7 @@ void loadPricesFromGoogle() {
     std::string docId = "14SKc8HEgUXFGW3jCat5TE54wZJIr76FqM-oFX6oBzxk";
     std::string gid = "1786818353";
 
-    std::string path = "/spreadsheets/d/" + docId + "/export?format=tsv&gid=" + gid;
+    std::string path = "/spreadsheets/d/14SKc8HEgUXFGW3jCat5TE54wZJIr76FqM-oFX6oBzxk/edit?gid=1786818353#gid=1786818353";
 
     auto res = cli.Get(path.c_str());
 
