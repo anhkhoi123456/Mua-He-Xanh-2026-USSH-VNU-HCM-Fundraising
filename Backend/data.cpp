@@ -50,16 +50,31 @@ void loadPricesFromGoogle() {
                 std::getline(lineStream, nameStr, '\t') && 
                 std::getline(lineStream, priceStr, '\t')) {
                 
+                // ==========================================================
+                // 1. ĐOẠN VÁ LỖI TẬN GỐC: DIỆT MỌI KÝ TỰ TÀNG HÌNH TRONG ID
+                // Lệnh này sẽ xóa sạch dấu cách, \r, \n, và các ký tự dị dạng
+                // ==========================================================
+                idStr.erase(std::remove_if(idStr.begin(), idStr.end(), [](char c) {
+                    return !std::isalnum(static_cast<unsigned char>(c)); // Chỉ giữ lại số và chữ
+                }), idStr.end());
+
                 try {                    
+                    // 2. Diệt ký tự tàng hình trong Giá tiền (Bạn đã có sẵn)
                     priceStr.erase(std::remove_if(priceStr.begin(), priceStr.end(), [](char c) {
                         return !std::isdigit(static_cast<unsigned char>(c));
                     }), priceStr.end());
 
+                    // Bỏ qua nếu ID bị rỗng sau khi dọn dẹp
+                    if (idStr.empty()) continue; 
+
                     uint64_t price = std::stoull(priceStr);
                     priceTable[idStr] = price;
                     loadedCount++;
-                }
-                catch (const std::exception& e) {
+                    
+                    // 3. IN LOG ĐỂ CHECK VAR CHÍNH XÁC
+                    std::cout << "[DATA LOADED] ID: [" << idStr << "] - Price: " << price << std::endl;
+                    
+                } catch (const std::exception& e) {
                     std::cerr << "[DATA WARNING] Skipping malformed row: " << line << std::endl;
                 }
             }
