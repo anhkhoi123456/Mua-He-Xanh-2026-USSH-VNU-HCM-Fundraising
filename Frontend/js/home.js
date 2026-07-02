@@ -1,7 +1,7 @@
 /* Copyright (c) 2026 Tran Duong Anh Khoi. Licensed under the MIT License. */
 
 // Gắn link API của bạn vào đây (Ví dụ: Link Google Apps Script Web App hoặc link Server C++ của bạn)
-const API_URL = 'https://script.google.com/macros/s/AKfycby6yAlVXBruKYRGN94xtjD8Jin9FEQjrq8cNGtnJdNR-PcgrGwgw1nhrXIUHWBw8RNF8g/exec'; 
+const API_URL = 'https://script.google.com/macros/s/AKfycbwbKzqFYiRe2pahLmuTn4AvFB9sDoCP5L5yOJmwgpacDNsQSn5FrCJ841_XCSiAT--Vwg/exec'; 
 
 const FALLBACK_RAISED = 0; 
 const FALLBACK_GOAL = 18000000;
