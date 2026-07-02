@@ -58,7 +58,7 @@ int main() {
                 // Step D: Transmit payload to Google Sheets Database
                 httplib::Client cli("https://script.google.com");
                 cli.set_follow_location(true); 
-                std::string webhookPath = "/macros/s/AKfycby-MXSuqWyMYYq7j1XDHsSUZ5yt245vT6-virgRVaVozg0TiYD_X4Uy_UpVuWN9GIj3xw/exec";
+                std::string webhookPath = "/macros/s/AKfycbxT6ZjujsdeFar5LgDk6aztP2fclm8ZjlWjDXX7Z65IjOjTNY9kZDYcdvPJIb4JxiO5wg/exec";
 
                 auto googleRes = cli.Post(webhookPath.c_str(), sheetPayload, "application/json");
                 
